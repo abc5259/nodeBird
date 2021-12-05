@@ -1,6 +1,6 @@
-import { Avatar, Button, Card } from "antd";
 import { useCallback } from "react";
-
+import PropTypes from "prop-types";
+import { Avatar, Button, Card } from "antd";
 const UserProfile = ({ setIsLoggendIn }) => {
   const onLoggout = useCallback(() => {
     setIsLoggendIn(false);
@@ -28,6 +28,10 @@ const UserProfile = ({ setIsLoggendIn }) => {
       </Card>
     </>
   );
+};
+
+UserProfile.propTypes = {
+  setIsLoggendIn: PropTypes.func.isRequired,
 };
 
 export default UserProfile;

@@ -1,5 +1,6 @@
 import { Button, Form, Input } from "antd";
 import { useCallback, useState } from "react";
+import PropTypes from "prop-types";
 import Link from "next/link";
 import styled from "styled-components";
 
@@ -58,6 +59,10 @@ const LoginForm = ({ setIsLoggendIn }) => {
       </FormWrapper>
     </>
   );
+};
+
+LoginForm.propTypes = {
+  setIsLoggendIn: PropTypes.func.isRequired,
 };
 
 export default LoginForm;
