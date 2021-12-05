@@ -4,7 +4,7 @@ const Signup = () => {
   return (
     <>
       <Head>
-        <title>Signup | NodeBird</title>
+        <title>회원가입 | NodeBird</title>
       </Head>
       <AppLayout>
         <div>Join</div>

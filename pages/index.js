@@ -3,9 +3,6 @@ import Head from "next/head";
 const Home = () => {
   return (
     <>
-      <Head>
-        <title></title>
-      </Head>
       <AppLayout>
         <div>index</div>
       </AppLayout>
