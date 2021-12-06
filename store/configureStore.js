@@ -9,7 +9,7 @@ const configureStore = () => {
     process.env.NODE_ENV === "production"
       ? compose(applyMiddleware(...middlewares))
       : composeWithDevTools(applyMiddleware(...middlewares));
-  const store = createStore(reducer, enhancer);
+  const store = createStore(reducer, enhancer); //앱의 상태를 유지하는 Redux 스토어를 만듭니다
   return store;
 };
 

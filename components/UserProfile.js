@@ -1,8 +1,7 @@
 import { useCallback } from "react";
-import PropTypes from "prop-types";
 import { Avatar, Button, Card } from "antd";
 import { useDispatch } from "react-redux";
-import { logoutAction } from "../reducers";
+import { logoutAction } from "../reducers/user";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
