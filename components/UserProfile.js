@@ -1,9 +1,13 @@
 import { useCallback } from "react";
 import PropTypes from "prop-types";
 import { Avatar, Button, Card } from "antd";
-const UserProfile = ({ setIsLoggendIn }) => {
-  const onLoggout = useCallback(() => {
-    setIsLoggendIn(false);
+import { useDispatch } from "react-redux";
+import { logoutAction } from "../reducers";
+
+const UserProfile = () => {
+  const dispatch = useDispatch();
+  const onLogOut = useCallback(() => {
+    dispatch(logoutAction());
   }, []);
   return (
     <>
@@ -24,14 +28,10 @@ const UserProfile = ({ setIsLoggendIn }) => {
         ]}
       >
         <Card.Meta avatar={<Avatar>JH</Avatar>} title="LeeJaeHoon" />
-        <Button onClick={onLoggout}>로그아웃</Button>
+        <Button onClick={onLogOut}>로그아웃</Button>
       </Card>
     </>
   );
-};
-
-UserProfile.propTypes = {
-  setIsLoggendIn: PropTypes.func.isRequired,
 };
 
 export default UserProfile;

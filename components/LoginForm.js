@@ -64,8 +64,4 @@ const LoginForm = () => {
   );
 };
 
-LoginForm.propTypes = {
-  setIsLoggendIn: PropTypes.func.isRequired,
-};
-
 export default LoginForm;
