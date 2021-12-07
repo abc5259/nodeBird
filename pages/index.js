@@ -1,5 +1,4 @@
 import AppLayout from "../components/AppLayout";
-import Head from "next/head";
 import { useSelector } from "react-redux";
 import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";

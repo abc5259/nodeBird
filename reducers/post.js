@@ -7,7 +7,7 @@ export const initialState = {
         nickname: "leejaehoon",
       },
       content: "첫번째 게시글 #해시태그 #익스프레스",
-      Image: [
+      Images: [
         {
           src: "https://gimg.gilbut.co.kr/book/BN001985/rn_view_BN001985.jpg",
         },
