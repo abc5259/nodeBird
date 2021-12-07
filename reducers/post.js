@@ -9,13 +9,10 @@ export const initialState = {
       content: "첫번째 게시글 #해시태그 #익스프레스",
       Images: [
         {
-          src: "https://gimg.gilbut.co.kr/book/BN001985/rn_view_BN001985.jpg",
+          src: "https://health.chosun.com/site/data/img_dir/2021/07/26/2021072601445_0.jpg",
         },
         {
-          src: "https://gimg.gilbut.co.kr/book/BN001985/rn_view_BN001958.jpg",
-        },
-        {
-          src: "https://gimg.gilbut.co.kr/book/BN001985/rn_view_BN001985.jpg",
+          src: "https://mimg.segye.com/content/image/2021/06/18/20210618504877.jpg",
         },
       ],
       Comments: [
