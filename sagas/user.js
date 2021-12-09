@@ -1,65 +1,99 @@
-import { all, fork, delay, takeLatest, put } from "redux-saga/effects";
+import { all, fork, call, delay, takeLatest, put } from "redux-saga/effects";
 import axios from "axios";
+import {
+  LOG_IN_FAILURE,
+  LOG_IN_REQUEST,
+  LOG_IN_SUCCESS,
+  LOG_OUT_FAILURE,
+  LOG_OUT_REQUEST,
+  LOG_OUT_SUCCESS,
+  SIGN_UP_REQUEST,
+} from "../reducers/user";
 
 //이부분은 제너레이터 아니다.
 // 서버 요청 부분
-function loginAPI(data) {
+function logInAPI(data) {
   return axios.post("/api/login", data);
 }
 
-function* login(action) {
+function* logIn(action) {
   try {
     console.log("saga Login");
     // const result = yield call(loginAPI, action.data); //call fork 차이 fork는 비동기 call은 동기
     yield delay(1000);
     yield put({
-      type: "LOG_IN_SUCCESS",
+      type: LOG_IN_SUCCESS,
       data: action.data,
     });
   } catch (err) {
     yield put({
       //put은 dispatch라고 생각하면 된다.
-      type: "LOG_IN_FAILURE",
-      data: err.response.data,
+      type: LOG_IN_FAILURE,
+      error: err.response.data,
     });
   }
 }
 
-function logoutAPI() {
+function logOutAPI() {
   return axios.post("/api/logout");
 }
 
-function* logout() {
+function* logOut() {
   try {
     //const result = yield call(logoutAPI); //call fork 차이 fork는 비동기 call은 동기
     yield delay(1000);
     yield put({
-      type: "LOG_OUT_SUCCESS",
+      type: LOG_OUT_SUCCESS,
     });
   } catch (err) {
     yield put({
       //put은 dispatch라고 생각하면 된다.
-      type: "LOG_OUT_FAILURE",
-      data: err.response.data,
+      type: LOG_OUT_FAILURE,
+      error: err.response.data,
     });
   }
 }
-function* watchLogin() {
+
+function signUpApi(data) {
+  return axios.post("/api/logout");
+}
+
+function* signUp(data) {
+  try {
+    // const result = yield call(signUpApi,data )
+    yield delay(1000);
+    yield put({
+      type: SIGN_UP_SUCCESS,
+      data,
+    });
+  } catch (err) {
+    yield put({
+      type: SIGN_UP_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function* watchLogIn() {
   //take는 LOG_IN_REQUES이라는 액션이 실행될때까지 기다리겠다 라는 뜻 (동기)
   //LOG_IN_REQUES이라는 액션이 실행되면 두번째 argument가 실행된다.
   //일회용 딱 한번만 실행된다.
   //takeEvery는 비동기
-  console.log("takeLatest");
-  yield takeLatest("LOG_IN_REQUEST", login);
+  yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
 function* watchLogOut() {
-  yield takeLatest("LOG_OUT_REQUEST", logout);
+  yield takeLatest(LOG_OUT_REQUEST, logOut);
+}
+
+function* watchSignUp() {
+  yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* userSaga() {
   yield all([
-    fork(watchLogin), //fork는 인자에 들어가있는 함수를 실행시킨다.
+    fork(watchLogIn), //fork는 인자에 들어가있는 함수를 실행시킨다.
     fork(watchLogOut),
+    fork(watchSignUp),
   ]);
 }
