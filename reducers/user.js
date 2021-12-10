@@ -44,13 +44,24 @@ export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
 
+export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
+export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
+
 const dummyUser = data => ({
   ...data,
   nickname: "JaeHoon",
   id: 1,
-  Posts: [],
-  Followings: [],
-  Followers: [],
+  Posts: [{ id: 1 }],
+  Followings: [
+    { nickname: "부기초" },
+    { nickname: "leejaehoon" },
+    { nickname: "newew" },
+  ],
+  Followers: [
+    { nickname: "부기초" },
+    { nickname: "leejaehoon" },
+    { nickname: "newew" },
+  ],
 });
 
 export const loginRequestAction = data => {
@@ -69,7 +80,6 @@ export const logoutRequestAction = () => {
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case LOG_IN_REQUEST:
-      console.log("reducer login");
       return {
         ...state,
         logInLoading: true,
@@ -114,40 +124,56 @@ const reducer = (state = initialState, action) => {
     case SIGN_UP_REQUEST:
       return {
         ...state,
-        signUpLoading: true, //로그아웃 시도중
+        signUpLoading: true,
         signUpDone: false,
         signUpError: null,
       };
     case SIGN_UP_SUCCESS:
       return {
         ...state,
-        signUpLoading: false, //로그아웃 시도중
+        signUpLoading: false,
         signUpDone: true,
       };
     case SIGN_UP_FAILURE:
       return {
         ...state,
-        signUpLoading: false, //로그아웃 시도중
+        signUpLoading: false,
         signUpError: action.error,
       };
     case CHANGE_NICKNAME_REQUEST:
       return {
         ...state,
-        changeNicknameLoading: true, //로그아웃 시도중
+        changeNicknameLoading: true,
         changeNicknameDone: false,
         changeNicknameError: null,
       };
     case CHANGE_NICKNAME_SUCCESS:
       return {
         ...state,
-        changeNicknameLoading: false, //로그아웃 시도중
+        changeNicknameLoading: false,
         changeNicknameDone: true,
       };
     case CHANGE_NICKNAME_FAILURE:
       return {
         ...state,
-        changeNicknameLoading: false, //로그아웃 시도중
+        changeNicknameLoading: false,
         changeNicknameError: action.error,
+      };
+    case ADD_POST_TO_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: [{ id: action.data }, ...state.me.Posts],
+        },
+      };
+    case REMOVE_POST_OF_ME:
+      return {
+        ...state,
+        me: {
+          ...state.me,
+          Posts: state.me.Posts.filter(post => post.id !== action.data),
+        },
       };
     default:
       return state;
