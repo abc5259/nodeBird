@@ -76,11 +76,13 @@ function* addCommnet(action) {
   try {
     // const result = yield call(addCommentAPI, action.data)
     yield delay(1000);
+    console.log("dele");
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: action.data,
     });
   } catch (err) {
+    console.error(err);
     yield put({
       type: ADD_COMMENT_FAILURE,
       error: err.response.data,
