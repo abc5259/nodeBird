@@ -5,6 +5,8 @@ import {
   ADD_POST_SUCCESS,
   ADD_POST_FAILURE,
   ADD_COMMENT_FAILURE,
+  ADD_COMMENT_SUCCESS,
+  ADD_COMMENT_REQUEST,
 } from "../reducers/post";
 
 function addPostAPI(data) {
@@ -17,6 +19,7 @@ function* addPost(action) {
     yield delay(1000);
     yield put({
       type: ADD_POST_SUCCESS,
+      data: action.data,
     });
   } catch (err) {
     yield put({
@@ -37,6 +40,7 @@ function* addCommnet(action) {
     yield delay(1000);
     yield put({
       type: ADD_COMMENT_SUCCESS,
+      data: action.data,
     });
   } catch (err) {
     yield put({
