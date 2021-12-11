@@ -8,7 +8,7 @@ const PostImages = ({ images }) => {
   };
   return (
     <>
-      <Carousel autoplay>
+      <Carousel>
         {images.map(image => (
           <div key={image.src}>
             <img src={image.src} style={contentStyle} alt={image.src} />
