@@ -21,6 +21,7 @@ router.post("/", async (req, res, next) => {
       password: hashedPassword,
       nickname,
     });
+    // res.setHeader('Access-control-Allow-Origin', 'http://localhost:3000')
     return res.status(201).send("ok");
   } catch (error) {
     console.error(error);

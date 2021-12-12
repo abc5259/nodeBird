@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const postRouter = require("./routes/post.js");
 const userRouter = require("./routes/user.js");
 const db = require("./models");
@@ -11,7 +12,12 @@ db.sequelize
   .catch(err => {
     console.error(err);
   });
-
+app.use(
+  cors({
+    origin: true,
+    credentials: false,
+  })
+); // argumnet로 {origin: true}로 해주면 *대신 보낸곳의 주소가 자동으로 들어간다.
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.get("/", (req, res) => {
