@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   Post.associate = db => {
     db.Post.belongsTo(db.User); //belongsTo가 있는 모델에 해당 모델의 아이디가 컬럼(UserId)으로 생긴다.
-    db.Post.belongsToMany(db.Hashtag);
+    db.Post.belongsToMany(db.Hashtag, { through: "PostHashtag" });
     // db.Post.belongsTo(db.User)이 있으니깐 구별을 위해 as를 써준다.
     db.Post.belongsToMany(db.User, { through: "Like", as: "Likers" }); //좋아요 관계
     //as를 안해주면 컬럼에 PostId가 생기는데 이미 있으니깐 as로 이름을 변경 할 수 있다.
