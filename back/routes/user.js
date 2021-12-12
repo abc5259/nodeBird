@@ -23,7 +23,6 @@ router.post("/", async (req, res, next) => {
     });
     return res.status(201).send("ok");
   } catch (error) {
-    console.error(error);
     next(error);
   }
 });
