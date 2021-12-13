@@ -47,8 +47,7 @@ function logOutAPI() {
 
 function* logOut() {
   try {
-    //const result = yield call(logoutAPI); //call fork 차이 fork는 비동기 call은 동기
-    yield delay(1000);
+    const result = yield call(logOutAPI); //call fork 차이 fork는 비동기 call은 동기
     yield put({
       type: LOG_OUT_SUCCESS,
     });
