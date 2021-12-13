@@ -23,8 +23,8 @@ db.sequelize
 passportConfig();
 app.use(
   cors({
-    origin: true,
-    credentials: false,
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 ); // argumnet로 {origin: true}로 해주면 *대신 보낸곳의 주소가 자동으로 들어간다.
 app.use(express.json());
