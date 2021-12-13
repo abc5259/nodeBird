@@ -21,17 +21,16 @@ import {
 //이부분은 제너레이터 아니다.
 // 서버 요청 부분
 function logInAPI(data) {
-  return axios.post("/api/login", data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
     console.log("saga Login");
-    // const result = yield call(loginAPI, action.data); //call fork 차이 fork는 비동기 call은 동기
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data); //call fork 차이 fork는 비동기 call은 동기
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     yield put({
@@ -43,7 +42,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post("/api/logout");
+  return axios.post("/user/logout");
 }
 
 function* logOut() {
@@ -63,7 +62,7 @@ function* logOut() {
 }
 
 function signUpApi(data) {
-  return axios.post("http://localhost:3065/user", data);
+  return axios.post("/user", data);
 }
 
 function* signUp(action) {

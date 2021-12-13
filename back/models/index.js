@@ -1,6 +1,6 @@
 const Sequelize = require("sequelize");
 const env = process.env.NODE_ENV || "development";
-const config = require("../config/config.json")[env];
+const config = require("../config/config.js")[env];
 const db = {};
 //이렇게 해줌으로써 sequelize가 node랑 musql을 연결해준다.
 const sequelize = new Sequelize(
