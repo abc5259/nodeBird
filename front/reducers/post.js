@@ -50,33 +50,6 @@ export const generateDummyPost = number =>
       ],
     }));
 
-// initialState.mainPosts = initialState.mainPosts.concat(generateDummyPost(10));
-//   Array(20)
-//     .fill()
-//     .map(() => ({
-//       id: shortid.generate(),
-//       User: {
-//         id: shortid.generate(),
-//         nickname: faker.name.findName(),
-//       },
-//       content: faker.lorem.paragraph(),
-//       Images: [
-//         {
-//           src: faker.image.image(),
-//         },
-//       ],
-//       Comments: [
-//         {
-//           User: {
-//             id: shortid.generate(),
-//             nickname: faker.name.findName(),
-//           },
-//           content: faker.lorem.sentence(),
-//         },
-//       ],
-//     }))
-// );
-
 // load post
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";

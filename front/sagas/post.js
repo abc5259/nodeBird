@@ -21,10 +21,8 @@ import {
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
   LOAD_POST_REQUEST,
-  generateDummyPost,
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
-import shortid from "shortid";
 
 function addPostAPI(data) {
   return axios.post("/post", { content: data });
@@ -76,14 +74,14 @@ function* removePost(action) {
   }
 }
 
-function* addCommentAPI(data) {
+function addCommentAPI(data) {
   return axios.post(`/post/${data.postId}/commnet`, data);
 }
 
 function* addCommnet(action) {
   try {
     const result = yield call(addCommentAPI, action.data);
-    yield delay(1000);
+    console.log(result.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
@@ -97,17 +95,17 @@ function* addCommnet(action) {
   }
 }
 
-function* loadPostAPI(data) {
-  return axios.post(`/api/post/${data.postId}/commnet`, data);
+function loadPostAPI(data) {
+  return axios.get("/posts", data);
 }
 
-function* loadPost() {
+function* loadPost(action) {
   try {
-    // const result = yield call(loadPostAPI, action.data)
-    yield delay(1000);
+    const result = yield call(loadPostAPI, action.data);
+    console.log(result);
     yield put({
       type: LOAD_POST_SUCCESS,
-      data: generateDummyPost(10),
+      data: result.data,
     });
   } catch (err) {
     console.error(err);
