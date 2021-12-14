@@ -21,6 +21,7 @@ module.exports.loadPosts = async (req, res, next) => {
           model: Comment,
           include: [{ model: User, attributes: ["id", "nickname"] }],
         },
+        { model: User, as: "Likers", attributes: ["id"] }, //좋아요 누른 사람
       ],
     });
     return res.status(200).json(posts);

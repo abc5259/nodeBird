@@ -24,7 +24,8 @@ const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector(state => state.user.me?.id);
-  const { removePostLoading, likePostDone } = useSelector(state => state.post);
+  const liked = post.Likers.find(liker => liker.id === id);
+  const { removePostLoading } = useSelector(state => state.post);
   const onLike = useCallback(() => {
     dispatch({
       type: LIKE_POST_REQUEST,
@@ -52,7 +53,7 @@ const PostCard = ({ post }) => {
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
           <RetweetOutlined key="retweet" />,
-          likePostDone ? (
+          liked ? (
             <HeartTwoTone
               twoToneColor="#eb2f96"
               key="heart"
@@ -126,6 +127,7 @@ PostCard.propTypes = {
     createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.object),
     Images: PropTypes.arrayOf(PropTypes.object),
+    Likers: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
 };
 
