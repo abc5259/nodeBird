@@ -7,9 +7,17 @@ import { addPost } from "../reducers/post";
 
 const PostForm = () => {
   const dispatch = useDispatch();
-  const { imagePaths, addPostDone } = useSelector(state => state.post);
+  const { imagePaths, addPostDone, addPostError } = useSelector(
+    state => state.post
+  );
   const imageInput = useRef();
   const [text, onChangeTest, setText] = useInput("");
+
+  useEffect(() => {
+    if (addPostError) {
+      alert(addPostError);
+    }
+  }, [addPostError]);
 
   useEffect(() => {
     if (addPostDone) {

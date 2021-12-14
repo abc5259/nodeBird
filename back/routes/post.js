@@ -1,5 +1,5 @@
 const express = require("express");
-const { Post, Comment, Image } = require("../models");
+const { Post, Comment, Image, User } = require("../models");
 const { isLoggedIn } = require("./middlewares");
 const router = express.Router();
 router.post("/", isLoggedIn, async (req, res, next) => {

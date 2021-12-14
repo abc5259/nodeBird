@@ -23,6 +23,7 @@ const LoginForm = () => {
   useEffect(() => {
     if (logInError) {
       alert(logInError);
+      
     }
   }, [logInError]);
 

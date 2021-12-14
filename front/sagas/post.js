@@ -34,13 +34,9 @@ function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data); //call fork 차이 fork는 비동기 call은 동기
     console.log(result);
-    const id = shortid.generate();
     yield put({
       type: ADD_POST_SUCCESS,
-      data: {
-        id,
-        content: result.data,
-      },
+      data: result.data,
     });
     yield put({
       type: ADD_POST_TO_ME,
