@@ -21,6 +21,12 @@ import {
   LOAD_POST_SUCCESS,
   LOAD_POST_FAILURE,
   LOAD_POST_REQUEST,
+  LIKE_POST_REQUEST,
+  UNLIKE_POST_REQUEST,
+  LIKE_POST_SUCCESS,
+  LIKE_POST_FAILURE,
+  UNLIKE_POST_SUCCESS,
+  UNLIKE_POST_FAILURE,
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
@@ -81,7 +87,6 @@ function addCommentAPI(data) {
 function* addCommnet(action) {
   try {
     const result = yield call(addCommentAPI, action.data);
-    console.log(result.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
@@ -116,6 +121,46 @@ function* loadPost(action) {
   }
 }
 
+function likePostAPI(data) {
+  return axios.patch(`/post/${data}/like`);
+}
+
+function* likePost(action) {
+  try {
+    const result = yield call(likePostAPI, action.data);
+    yield put({
+      type: LIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LIKE_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
+function unlikePostAPI(data) {
+  return axios.delete(`/post/${data}/like`);
+}
+
+function* unlikePost(action) {
+  try {
+    const result = yield call(unlikePostAPI, action.data);
+    yield put({
+      type: UNLIKE_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: UNLIKE_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchAddPost() {
   // 마지막 액션만 처리해줌
   yield takeLatest(ADD_POST_REQUEST, addPost);
@@ -133,11 +178,21 @@ function* watchLoadPost() {
   yield throttle(5000, LOAD_POST_REQUEST, loadPost);
 }
 
+function* watchLikePost() {
+  yield takeLatest(LIKE_POST_REQUEST, likePost);
+}
+
+function* watchUnlikePost() {
+  yield throttle(5000, UNLIKE_POST_REQUEST, unlikePost);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
     fork(watchAddComment),
     fork(watchRemovePost),
     fork(watchLoadPost),
+    fork(watchLikePost),
+    fork(watchUnlikePost),
   ]);
 }

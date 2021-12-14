@@ -22,6 +22,14 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  // like post
+  likePostLoading: false,
+  likePostDone: false,
+  likePostError: null,
+  // unlike post
+  unlikePostLoading: false,
+  unlikePostDone: false,
+  unlikePostError: null,
 };
 
 export const generateDummyPost = number =>
@@ -66,6 +74,14 @@ export const REMOVE_POST_FAILURE = "REMOVE_POST_FAILURE";
 export const ADD_COMMENT_REQUEST = "ADD_COMMENT_REQUEST";
 export const ADD_COMMENT_SUCCESS = "ADD_COMMENT_SUCCESS";
 export const ADD_COMMENT_FAILURE = "ADD_COMMENT_FAILURE";
+// like
+export const LIKE_POST_REQUEST = "LIKE_POST_REQUEST";
+export const LIKE_POST_SUCCESS = "LIKE_POST_SUCCESS";
+export const LIKE_POST_FAILURE = "LIKE_POST_FAILURE";
+// unlike
+export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
+export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
+export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 
 export const addPost = data => ({
   type: ADD_POST_REQUEST,
@@ -101,6 +117,7 @@ const dummyComment = data => ({
 const reducer = (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
+      // LOAD POST
       case LOAD_POST_REQUEST:
         draft.loadPostLoading = true;
         draft.loadPostDone = false;
@@ -116,6 +133,7 @@ const reducer = (state = initialState, action) => {
         draft.loadPostLoading = false;
         draft.loadPostError = action.error;
         break;
+      // ADD POST
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;
@@ -130,6 +148,7 @@ const reducer = (state = initialState, action) => {
         draft.addPostLoading = false;
         draft.addPostError = action.error;
         break;
+      // REMOVE POST
       case REMOVE_POST_REQUEST:
         draft.removePostLoading = true;
         draft.removePostDone = false;
@@ -146,6 +165,7 @@ const reducer = (state = initialState, action) => {
         draft.removePostLoading = false;
         draft.removePostError = action.error;
         break;
+      // ADD COMMENT
       case ADD_COMMENT_REQUEST:
         draft.addCommentLoading = true;
         draft.addCommentDone = false;
@@ -159,23 +179,39 @@ const reducer = (state = initialState, action) => {
         draft.addCommentLoading = false;
         draft.addCommentDone = true;
         break;
-      // const postIndex = state.mainPosts.findIndex(
-      //   post => action.data.postId === post.id
-      // );
-      // const post = state.mainPosts[postIndex];
-      // const Comments = [dummyComment(action.data), ...post.Comments];
-      // const mainPosts = [...state.mainPosts];
-      // mainPosts[postIndex] = { ...post, Comments };
-      // return {
-      //   ...state,
-      //   mainPosts,
-      //   addCommentDone: true,
-      //   addCommentLoading: false,
-      // };
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
         break;
+      // LIKE POST
+      case LIKE_POST_REQUEST:
+        draft.likePostLoading = true;
+        draft.likePostDone = false;
+        draft.likePostError = null;
+        break;
+      case LIKE_POST_SUCCESS:
+        draft.likePostLoading = false;
+        draft.likePostDone = true;
+        break;
+      case LIKE_POST_FAILURE:
+        draft.likePostLoading = false;
+        draft.likePostError = action.error;
+        break;
+      // UNLIKE POST
+      case UNLIKE_POST_REQUEST:
+        draft.unlikePostLoading = true;
+        draft.unlikePostDone = false;
+        draft.unlikePostError = null;
+        break;
+      case UNLIKE_POST_SUCCESS:
+        draft.unlikePostLoading = false;
+        draft.unlikePostDone = true;
+        break;
+      case UNLIKE_POST_FAILURE:
+        draft.unlikePostLoading = false;
+        draft.unlikePostError = action.error;
+        break;
+      // Default
       default:
         break;
     }
