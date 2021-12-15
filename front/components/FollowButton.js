@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Button } from "antd";
 import { useCallback } from "react";
-import { useSelector, dispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { FOLLOW_REQUEST, UNFOLLOW_REQUEST } from "../reducers/user";
 import { useDispatch } from "react-redux";
 

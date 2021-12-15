@@ -2,7 +2,7 @@ const bcrypt = require("bcrypt");
 const passport = require("passport");
 const { User, Post } = require("../models");
 
-module.exports.stayLogIn = async (req, res, next) => {
+exports.stayLogIn = async (req, res, next) => {
   try {
     if (req.user) {
       const fullUserWithoutPassword = await User.findOne({
@@ -37,7 +37,7 @@ module.exports.stayLogIn = async (req, res, next) => {
   }
 };
 
-module.exports.signUp = async (req, res, next) => {
+exports.signUp = async (req, res, next) => {
   const { email, password, nickname } = req.body;
   try {
     const exUser = await User.findOne({
@@ -62,7 +62,7 @@ module.exports.signUp = async (req, res, next) => {
   }
 };
 
-module.exports.logIn = (req, res, next) => {
+exports.logIn = (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       console.error(error);
@@ -101,7 +101,7 @@ module.exports.logIn = (req, res, next) => {
   })(req, res, next);
 };
 
-module.exports.logOut = (req, res) => {
+exports.logOut = (req, res) => {
   req.logout();
   req.session.destroy();
   res.send("ok");

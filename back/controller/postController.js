@@ -1,6 +1,6 @@
 const { Post, Comment, Image, User } = require("../models");
 
-module.exports.createComment = async (req, res, next) => {
+exports.createComment = async (req, res, next) => {
   try {
     const {
       body: { content },
@@ -32,7 +32,7 @@ module.exports.createComment = async (req, res, next) => {
   }
 };
 
-module.exports.createPost = async (req, res, next) => {
+exports.createPost = async (req, res, next) => {
   try {
     const { content } = req.body;
     const { id: UserId } = req.user;
@@ -59,7 +59,7 @@ module.exports.createPost = async (req, res, next) => {
   }
 };
 
-module.exports.likePost = async (req, res, next) => {
+exports.likePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const post = await Post.findOne({
@@ -76,7 +76,7 @@ module.exports.likePost = async (req, res, next) => {
   }
 };
 
-module.exports.unlikePost = async (req, res, next) => {
+exports.unlikePost = async (req, res, next) => {
   try {
     const { postId } = req.params;
     const post = await Post.findOne({

@@ -1,6 +1,6 @@
 const { Post, User, Image, Comment } = require("../models");
 
-module.exports.loadPosts = async (req, res, next) => {
+exports.loadPosts = async (req, res, next) => {
   try {
     const posts = await Post.findAll({
       // where: {id: lastId},
