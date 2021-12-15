@@ -14,7 +14,7 @@ export const initialState = {
   logOutDone: false,
   logOutError: false,
   //signup
-  signUpLoading: false, //로그아웃 시도중
+  signUpLoading: false, //회원가입 시도중
   signUpDone: false,
   signUpError: false,
   //nickname
@@ -29,6 +29,18 @@ export const initialState = {
   unfollowLoading: false, // 언팔로우 시도중
   unfollowDone: false,
   unfollowError: false,
+  // removeFollower
+  removeFollowerLoading: false, // 팔로워 삭제
+  removeFollowerDone: false,
+  removeFollowerError: false,
+  // load followers
+  loadFollowersLoading: false, // 팔로워들 로딩
+  loadFollowersDone: false,
+  loadFollowersError: false,
+  // load followings
+  loadFollowingsLoading: false, // 팔로잉들 로딩
+  loadFollowingsDone: false,
+  loadFollowingsError: false,
   me: null,
   signUpdata: {},
   loginData: {},
@@ -62,26 +74,21 @@ export const FOLLOW_FAILURE = "FOLLOW_FAILURE";
 export const UNFOLLOW_REQUEST = "UNFOLLOW_REQUEST";
 export const UNFOLLOW_SUCCESS = "UNFOLLOW_SUCCESS";
 export const UNFOLLOW_FAILURE = "UNFOLLOW_FAILURE";
+//unfollow
+export const REMOVE_FOLLOWER_REQUEST = "REMOVE_FOLLOWER_REQUEST";
+export const REMOVE_FOLLOWER_SUCCESS = "REMOVE_FOLLOWER_SUCCESS";
+export const REMOVE_FOLLOWER_FAILURE = "REMOVE_FOLLOWER_FAILURE";
+//load followers
+export const LOAD_FOLLOWERS_REQUEST = "LOAD_FOLLOWERS_REQUEST";
+export const LOAD_FOLLOWERS_SUCCESS = "LOAD_FOLLOWERS_SUCCESS";
+export const LOAD_FOLLOWERS_FAILURE = "LOAD_FOLLOWERS_FAILURE";
+//load followings
+export const LOAD_FOLLOWINGS_REQUEST = "LOAD_FOLLOWINGS_REQUEST";
+export const LOAD_FOLLOWINGS_SUCCESS = "LOAD_FOLLOWINGS_SUCCESS";
+export const LOAD_FOLLOWINGS_FAILURE = "LOAD_FOLLOWINGS_FAILURE";
 
 export const ADD_POST_TO_ME = "ADD_POST_TO_ME";
 export const REMOVE_POST_OF_ME = "REMOVE_POST_OF_ME";
-
-const dummyUser = data => ({
-  ...data,
-  nickname: "JaeHoon",
-  id: 1,
-  Posts: [{ id: 1 }],
-  Followings: [
-    { nickname: "부기초" },
-    { nickname: "leejaehoon" },
-    { nickname: "newew" },
-  ],
-  Followers: [
-    { nickname: "부기초" },
-    { nickname: "leejaehoon" },
-    { nickname: "newew" },
-  ],
-});
 
 export const loginRequestAction = data => {
   return {
@@ -169,7 +176,7 @@ const reducer = (state = initialState, action) => {
       case FOLLOW_SUCCESS:
         draft.followLoading = false;
         draft.followDone = true;
-        draft.me.Followings.push({ id: action.data });
+        draft.me.Followings.push({ id: action.data.UserId });
         break;
       case FOLLOW_FAILURE:
         draft.followLoading = false;
@@ -185,12 +192,29 @@ const reducer = (state = initialState, action) => {
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
         draft.me.Followings = draft.me.Followings.filter(
-          v => v.id !== action.data
+          v => v.id !== action.data.UserId
         );
         break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
         draft.unfollowError = action.error;
+        break;
+      // REMOVE FOLLOWER
+      case REMOVE_FOLLOWER_REQUEST:
+        draft.removeFollowerLoading = true;
+        draft.removeFollowerDone = false;
+        draft.removeFollowerError = null;
+        break;
+      case REMOVE_FOLLOWER_SUCCESS:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerDone = true;
+        draft.me.Followers = draft.me.Followers.filter(
+          v => v.id !== action.data.UserId
+        );
+        break;
+      case REMOVE_FOLLOWER_FAILURE:
+        draft.removeFollowerLoading = false;
+        draft.removeFollowerError = action.error;
         break;
       // CHANGE NICKNAME
       case CHANGE_NICKNAME_REQUEST:
@@ -206,6 +230,36 @@ const reducer = (state = initialState, action) => {
       case CHANGE_NICKNAME_FAILURE:
         draft.changeNicknameLoading = false;
         draft.changeNicknameError = action.error;
+        break;
+      // LOAD FOLLOWERS
+      case LOAD_FOLLOWERS_REQUEST:
+        draft.loadFollowersLoading = true;
+        draft.loadFollowersDone = false;
+        draft.loadFollowersError = null;
+        break;
+      case LOAD_FOLLOWERS_SUCCESS:
+        draft.loadFollowersLoading = false;
+        draft.me.Followers = action.data;
+        draft.loadFollowersDone = true;
+        break;
+      case LOAD_FOLLOWERS_FAILURE:
+        draft.loadFollowersLoading = false;
+        draft.loadFollowersError = action.error;
+        break;
+      // LOAD FOLLOWINGS
+      case LOAD_FOLLOWINGS_REQUEST:
+        draft.loadFollowingsLoading = true;
+        draft.loadFollowingsDone = false;
+        draft.loadFollowingsError = null;
+        break;
+      case LOAD_FOLLOWINGS_SUCCESS:
+        draft.loadFollowingsLoading = false;
+        draft.me.Followings = action.data;
+        draft.loadFollowingsDone = true;
+        break;
+      case LOAD_FOLLOWINGS_FAILURE:
+        draft.loadFollowingsLoading = false;
+        draft.loadFollowingsError = action.error;
         break;
       // ADD_POST_TO_ME
       case ADD_POST_TO_ME:

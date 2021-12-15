@@ -126,3 +126,77 @@ exports.updateNickname = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.follow = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) {
+      return res.status(403).send("없는 사람을 팔로우하려고 하시네요?");
+    }
+    await user.addFollowers(req.user.id);
+    return res.status(200).json({ UserId: +userId });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.unFollow = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const user = await User.findOne({ where: { id: userId } });
+    if (!user) {
+      return res.status(403).send("없는 사람을 언팔로우하려고 하시네요?");
+    }
+    await user.removeFollowers(req.user.id);
+    return res.status(200).json({ UserId: +userId });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.removeFollower = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { userId } = req.params;
+    const me = await User.findOne({ where: { id } });
+    if (!me) {
+      return res.status(403).send("누구시죠?");
+    }
+    await me.removeFollowers(userId);
+    return res.status(200).json({ UserId: +userId });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.getFollowers = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      return res.status(403).send("없는 사람을 언팔로우하려고 하시네요?");
+    }
+    const followers = await user.getFollowers();
+    return res.status(200).json(followers);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.getFollowings = async (req, res, next) => {
+  try {
+    const user = await User.findOne({ where: { id: req.user.id } });
+    if (!user) {
+      return res.status(403).send("없는 사람을 언팔로우하려고 하시네요?");
+    }
+    const followings = await user.getFollowings();
+    return res.status(200).json(followings);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
