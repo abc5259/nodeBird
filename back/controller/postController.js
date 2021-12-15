@@ -92,3 +92,17 @@ module.exports.unlikePost = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deletePost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const { id: UserId } = req.user;
+    await Post.destroy({
+      where: { id: postId, UserId },
+    });
+    return res.status(200).json({ PostId: +postId });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};

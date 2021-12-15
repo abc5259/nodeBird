@@ -106,3 +106,23 @@ module.exports.logOut = (req, res) => {
   req.session.destroy();
   res.send("ok");
 };
+
+exports.updateNickname = async (req, res, next) => {
+  try {
+    const { id } = req.user;
+    const { nickname } = req.body;
+    console.log(nickname);
+    await User.update(
+      {
+        nickname,
+      },
+      {
+        where: { id },
+      }
+    );
+    return res.status(200).json({ nickname });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
