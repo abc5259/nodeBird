@@ -19,11 +19,13 @@ exports.stayLogIn = async (req, res, next) => {
             model: User,
             as: "Followings",
             attributes: ["id"],
+            through: { attributes: [] },
           },
           {
             model: User,
             as: "Followers",
             attributes: ["id"],
+            through: { attributes: [] },
           },
         ],
       });
@@ -89,10 +91,14 @@ exports.logIn = (req, res, next) => {
           {
             model: User,
             as: "Followings",
+            attributes: ["id"],
+            through: { attributes: [] },
           },
           {
             model: User,
             as: "Followers",
+            attributes: ["id"],
+            through: { attributes: [] },
           },
         ],
       });
