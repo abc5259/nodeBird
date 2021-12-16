@@ -1,4 +1,4 @@
-const { Post, Comment, Image, User } = require("../models");
+const { Post, Comment, Image, User, Hashtag } = require("../models");
 
 exports.createComment = async (req, res, next) => {
   try {
@@ -36,16 +36,28 @@ exports.createPost = async (req, res, next) => {
   try {
     const { content, image } = req.body;
     const { id: UserId } = req.user;
+    const hashtags = content.match(/#[^\s#]+/g);
     const post = await Post.create({
       content,
       UserId,
     });
+    if (hashtags) {
+      const result = await Promise.all(
+        hashtags.map(hashtag =>
+          Hashtag.findOrCreate({
+            where: { name: hashtag.slice(1).toLowerCase() },
+          })
+        )
+      ); // [[노드,true],[리액트,true]]
+      await post.addHashtags(result.map(v => v[0]));
+    }
     if (image) {
       if (Array.isArray(image)) {
         // 이미지를 여러개 올리면 image: ["이.png", "재.png"]
         const dbImages = await Promise.all(
           image.map(imagePath => Image.create({ src: imagePath }))
         );
+        console.log(dbImages);
         await post.addImages(dbImages);
       } else {
         // 이미지를 하나만 올리면 image: "이.png"
