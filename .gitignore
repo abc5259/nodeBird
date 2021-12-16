@@ -1,4 +1,5 @@
 config/
+uploads/
 # Logs
 logs
 *.log

@@ -106,3 +106,8 @@ exports.deletePost = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.postImages = (req, res, next) => {
+  console.log(req.files);
+  return res.json(req.files.map(v => v.filename));
+};
