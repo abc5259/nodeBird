@@ -34,21 +34,40 @@ exports.createComment = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   try {
-    const { content } = req.body;
+    const { content, image } = req.body;
     const { id: UserId } = req.user;
     const post = await Post.create({
       content,
       UserId,
     });
+    if (image) {
+      if (Array.isArray(image)) {
+        // 이미지를 여러개 올리면 image: ["이.png", "재.png"]
+        const dbImages = await Promise.all(
+          image.map(imagePath => Image.create({ src: imagePath }))
+        );
+        await post.addImages(dbImages);
+      } else {
+        // 이미지를 하나만 올리면 image: "이.png"
+        const dbImage = await Image.create({ src: image });
+        await post.addImages(dbImage);
+      }
+    }
+    console.log(post.getImages());
     const fullPost = await Post.findOne({
       where: { id: post.id },
       include: [
-        { model: Image },
         {
-          model: Comment, //댓글 작성자
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
           include: [{ model: User, attributes: ["id", "nickname"] }],
         },
-        { model: User, attributes: ["id", "nickname"] }, // 게시글 작성자
         { model: User, as: "Likers", attributes: ["id"] }, //좋아요 누른 사람
       ],
     });
@@ -108,6 +127,5 @@ exports.deletePost = async (req, res, next) => {
 };
 
 exports.postImages = (req, res, next) => {
-  console.log(req.files);
   return res.json(req.files.map(v => v.filename));
 };

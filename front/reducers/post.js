@@ -90,6 +90,8 @@ export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
 export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
 export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
+// remove image
+export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 export const addPost = data => ({
   type: ADD_POST_REQUEST,
@@ -99,26 +101,6 @@ export const addPost = data => ({
 export const addComment = data => ({
   type: ADD_COMMENT_REQUEST,
   data,
-});
-
-const dummyPost = ({ id, content }) => ({
-  id,
-  content,
-  User: {
-    id: 1,
-    nickname: "zerocho",
-  },
-  Images: [],
-  Comments: [],
-});
-
-const dummyComment = data => ({
-  id: shortid.generate(),
-  content: data.content,
-  User: {
-    id: data.userId,
-    nickname: "nero",
-  },
 });
 
 //이전 상태를 액샨을 통해 다음 상태를 만들어내는 함수(단 불변성을 지키면서)
@@ -150,6 +132,7 @@ const reducer = (state = initialState, action) => {
       case ADD_POST_SUCCESS:
         draft.addPostLoading = false;
         draft.addPostDone = true;
+        draft.imagePaths = [];
         draft.mainPosts.unshift(action.data);
         break;
       case ADD_POST_FAILURE:
@@ -240,6 +223,9 @@ const reducer = (state = initialState, action) => {
       case UPLOAD_IMAGES_FAILURE:
         draft.uploadImagesLoading = false;
         draft.uploadImagesError = action.error;
+        break;
+      case REMOVE_IMAGE:
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
       // Default
       default:

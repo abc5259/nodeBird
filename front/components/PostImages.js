@@ -8,10 +8,14 @@ const PostImages = ({ images }) => {
   };
   return (
     <>
-      <Carousel>
+      <Carousel dotPosition="top">
         {images.map(image => (
           <div key={image.src}>
-            <img src={image.src} style={contentStyle} alt={image.src} />
+            <img
+              src={`http://localhost:3065/${image.src}`}
+              style={contentStyle}
+              alt={image.src}
+            />
           </div>
         ))}
       </Carousel>

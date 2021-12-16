@@ -2,6 +2,7 @@ const express = require("express");
 const cors = require("cors");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const path = require("path");
 const passport = require("passport");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
@@ -29,6 +30,7 @@ app.use(
     credentials: true,
   })
 ); // argumnet로 {origin: true}로 해주면 *대신 보낸곳의 주소가 자동으로 들어간다.
+app.use("/", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
