@@ -8,6 +8,7 @@ import { LOAD_POST_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "@redux-saga/core";
+import axios from "axios";
 const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector(state => state.user);
@@ -56,11 +57,11 @@ const Home = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
     async ({ req }) => {
-      // const cookie = req ? req.headers.cookie : "";
-      // axios.defaults.headers.Cookie = "";
-      // if (req && cookie) {
-      //   axios.defaults.headers.Cookie = cookie;
-      // }
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
       store.dispatch({
         type: LOAD_MY_INFO_REQUEST,
       });

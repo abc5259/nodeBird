@@ -42,8 +42,6 @@ export const initialState = {
   loadFollowingsDone: false,
   loadFollowingsError: false,
   me: null,
-  signUpdata: {},
-  loginData: {},
 };
 
 //load my info
