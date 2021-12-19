@@ -1,5 +1,51 @@
 const { Post, Comment, Image, User, Hashtag } = require("../models");
 
+exports.loadPost = async (req, res, next) => {
+  try {
+    const { postId } = req.params;
+    const post = await Post.findOne({
+      where: { id: postId },
+    });
+    if (!post) {
+      return res.status(404).send("게시글이 존재하지 않습니다.");
+    }
+    const fullPost = await Post.findOne({
+      where: { id: post.id },
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [{ model: User, attributes: ["id", "nickname"] }],
+        },
+        { model: User, as: "Likers", attributes: ["id"] }, //좋아요 누른 사람
+      ],
+    });
+    return res.status(201).send(fullPost);
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
 exports.createComment = async (req, res, next) => {
   try {
     const {

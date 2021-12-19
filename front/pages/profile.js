@@ -8,7 +8,11 @@ import Router from "next/router";
 import {
   LOAD_FOLLOWERS_REQUEST,
   LOAD_FOLLOWINGS_REQUEST,
+  LOAD_MY_INFO_REQUEST,
 } from "../reducers/user";
+import axios from "axios";
+import { END } from "@redux-saga/core";
+import wrapper from "../store/configureStore";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -44,5 +48,21 @@ const Profile = () => {
     </>
   );
 };
+
+export const getServerSideProps = wrapper.getServerSideProps(
+  store =>
+    async ({ req }) => {
+      const cookie = req ? req.headers.cookie : "";
+      axios.defaults.headers.Cookie = "";
+      if (req && cookie) {
+        axios.defaults.headers.Cookie = cookie;
+      }
+      store.dispatch({
+        type: LOAD_MY_INFO_REQUEST,
+      });
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+);
 
 export default Profile;

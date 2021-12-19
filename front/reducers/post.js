@@ -3,10 +3,15 @@ import produce from "immer";
 import faker from "faker";
 
 export const initialState = {
+  singlePost: null,
   mainPosts: [],
   imagePaths: [],
   hasMorePost: true,
-  // add post
+  // load posts
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
+  // load post
   loadPostLoading: false,
   loadPostDone: false,
   loadPostError: null,
@@ -66,6 +71,10 @@ export const generateDummyPost = number =>
       ],
     }));
 
+// load posts
+export const LOAD_POSTS_REQUEST = "LOAD_POSTS_REQUEST";
+export const LOAD_POSTS_SUCCESS = "LOAD_POSTS_SUCCESS";
+export const LOAD_POSTS_FAILURE = "LOAD_POSTS_FAILURE";
 // load post
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
@@ -115,6 +124,22 @@ export const addComment = data => ({
 const reducer = (state = initialState, action) => {
   return produce(state, draft => {
     switch (action.type) {
+      // LOAD POSTS
+      case LOAD_POSTS_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POSTS_SUCCESS:
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePost = action.data.length === 10;
+        break;
+      case LOAD_POSTS_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       // LOAD POST
       case LOAD_POST_REQUEST:
         draft.loadPostLoading = true;
@@ -124,8 +149,7 @@ const reducer = (state = initialState, action) => {
       case LOAD_POST_SUCCESS:
         draft.loadPostLoading = false;
         draft.loadPostDone = true;
-        draft.mainPosts = draft.mainPosts.concat(action.data);
-        draft.hasMorePost = action.data.length === 10;
+        draft.singlePost = action.data;
         break;
       case LOAD_POST_FAILURE:
         draft.loadPostLoading = false;

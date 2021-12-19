@@ -4,7 +4,7 @@ import PostCard from "../components/PostCard";
 import PostForm from "../components/PostForm";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { LOAD_POST_REQUEST } from "../reducers/post";
+import { LOAD_POSTS_REQUEST, LOAD_POST_REQUEST } from "../reducers/post";
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 import { END } from "@redux-saga/core";
@@ -13,7 +13,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const { me } = useSelector(state => state.user);
   const { retweetError } = useSelector(state => state.post);
-  const { mainPosts, hasMorePost, loadPostLoading } = useSelector(
+  const { mainPosts, hasMorePost, loadPostsLoading } = useSelector(
     state => state.post
   );
   useEffect(() => {
@@ -28,7 +28,7 @@ const Home = () => {
         document.documentElement.scrollHeight - 300 <
         window.scrollY + document.documentElement.clientHeight
       ) {
-        if (hasMorePost && !loadPostLoading) {
+        if (hasMorePost && !loadPostsLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
             type: LOAD_POST_REQUEST,
@@ -41,7 +41,7 @@ const Home = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [hasMorePost, loadPostLoading]);
+  }, [hasMorePost, loadPostsLoading]);
   return (
     <>
       <AppLayout>
@@ -66,7 +66,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         type: LOAD_MY_INFO_REQUEST,
       });
       store.dispatch({
-        type: LOAD_POST_REQUEST,
+        type: LOAD_POSTS_REQUEST,
       });
       store.dispatch(END);
       await store.sagaTask.toPromise();

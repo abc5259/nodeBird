@@ -25,6 +25,9 @@ import {
   RETWEET_REQUEST,
   RETWEET_SUCCESS,
   RETWEET_FAILURE,
+  LOAD_POSTS_SUCCESS,
+  LOAD_POSTS_FAILURE,
+  LOAD_POSTS_REQUEST,
 } from "../reducers/post";
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from "../reducers/user";
 
@@ -97,21 +100,21 @@ function* addCommnet(action) {
   }
 }
 
-function loadPostAPI(lastId) {
+function loadPostsAPI(lastId) {
   return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
-function* loadPost(action) {
+function* loadPosts(action) {
   try {
-    const result = yield call(loadPostAPI, action.lastId);
+    const result = yield call(loadPostsAPI, action.lastId);
     yield put({
-      type: LOAD_POST_SUCCESS,
+      type: LOAD_POSTS_SUCCESS,
       data: result.data,
     });
   } catch (err) {
     console.error(err);
     yield put({
-      type: LOAD_POST_FAILURE,
+      type: LOAD_POSTS_FAILURE,
       error: err.response.data,
     });
   }
@@ -197,6 +200,26 @@ function* retweet(action) {
   }
 }
 
+function loadPostAPI(postId) {
+  return axios.get(`/post/${postId}`);
+}
+
+function* loadPost(action) {
+  try {
+    const result = yield call(loadPostAPI, action.data);
+    yield put({
+      type: LOAD_POST_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    console.error(err);
+    yield put({
+      type: LOAD_POST_FAILURE,
+      error: err.response.data,
+    });
+  }
+}
+
 function* watchAddPost() {
   // 마지막 액션만 처리해줌
   yield takeLatest(ADD_POST_REQUEST, addPost);
@@ -210,8 +233,8 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addCommnet);
 }
 
-function* watchLoadPost() {
-  yield throttle(5000, LOAD_POST_REQUEST, loadPost);
+function* watchLoadPosts() {
+  yield throttle(5000, LOAD_POSTS_REQUEST, loadPosts);
 }
 
 function* watchLikePost() {
@@ -230,11 +253,16 @@ function* watchRetweet() {
   yield takeLatest(RETWEET_REQUEST, retweet);
 }
 
+function* watchLoadPost() {
+  yield takeLatest(LOAD_POST_REQUEST, loadPost);
+}
+
 export default function* postSaga() {
   yield all([
     fork(watchAddPost),
     fork(watchAddComment),
     fork(watchRemovePost),
+    fork(watchLoadPosts),
     fork(watchLoadPost),
     fork(watchLikePost),
     fork(watchUnlikePost),
