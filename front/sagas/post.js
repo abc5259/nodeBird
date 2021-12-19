@@ -1,12 +1,4 @@
-import {
-  all,
-  fork,
-  put,
-  call,
-  takeLatest,
-  throttle,
-  delay,
-} from "redux-saga/effects";
+import { all, fork, put, call, takeLatest, throttle } from "redux-saga/effects";
 import axios from "axios";
 import {
   ADD_POST_REQUEST,
@@ -105,14 +97,13 @@ function* addCommnet(action) {
   }
 }
 
-function loadPostAPI(data) {
-  return axios.get("/posts", data);
+function loadPostAPI(lastId) {
+  return axios.get(`/posts?lastId=${lastId || 0}`);
 }
 
 function* loadPost(action) {
   try {
-    const result = yield call(loadPostAPI, action.data);
-    console.log(result);
+    const result = yield call(loadPostAPI, action.lastId);
     yield put({
       type: LOAD_POST_SUCCESS,
       data: result.data,

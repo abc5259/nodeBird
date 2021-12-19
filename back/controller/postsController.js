@@ -1,9 +1,15 @@
 const { Post, User, Image, Comment } = require("../models");
+const { Op } = require("sequelize");
 
 exports.loadPosts = async (req, res, next) => {
   try {
+    const { lastId } = req.query;
+    const where = {};
+    if (+lastId) {
+      where.id = { [Op.lt]: +lastId }; //Id가 lastId보다 작은
+    }
     const posts = await Post.findAll({
-      // where: {id: lastId},
+      where,
       limit: 10,
       order: [
         ["createdAt", "DESC"],
