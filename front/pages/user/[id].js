@@ -1,15 +1,19 @@
-import AppLayout from "../components/AppLayout";
+import AppLayout from "../../components/AppLayout";
 import { useSelector } from "react-redux";
-import PostCard from "../components/PostCard";
-import PostForm from "../components/PostForm";
+import PostCard from "../../components/PostCard";
+// import PostForm from "....//components/PostForm";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { LOAD_POSTS_REQUEST } from "../reducers/post";
-import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
-import wrapper from "../store/configureStore";
+import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
+import wrapper from "../../store/configureStore";
 import { END } from "@redux-saga/core";
 import axios from "axios";
-const Home = () => {
+import { useRouter } from "next/router";
+import { LOAD_USER_POSTS_REQUEST } from "../../reducers/post";
+import Head from "next/head";
+const UserPosts = () => {
+  const router = useRouter();
+  const { id } = router.query;
   const dispatch = useDispatch();
   const { me } = useSelector(state => state.user);
   const { retweetError } = useSelector(state => state.post);
@@ -31,7 +35,8 @@ const Home = () => {
         if (hasMorePost && !loadPostsLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
-            type: LOAD_POSTS_REQUEST,
+            type: LOAD_USER_POSTS_REQUEST,
+            data: id,
             lastId,
           });
         }
@@ -45,7 +50,8 @@ const Home = () => {
   return (
     <>
       <AppLayout>
-        {me && <PostForm />}
+        <Head>{/* <title>{.nickname}님의 글</title> */}</Head>
+        {/* {me && <PostForm />} */}
         {mainPosts.map(post => (
           <PostCard key={post.id} post={post} />
         ))}
@@ -56,7 +62,7 @@ const Home = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
   store =>
-    async ({ req }) => {
+    async ({ req, params }) => {
       const cookie = req ? req.headers.cookie : "";
       axios.defaults.headers.Cookie = "";
       if (req && cookie) {
@@ -66,11 +72,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
         type: LOAD_MY_INFO_REQUEST,
       });
       store.dispatch({
-        type: LOAD_POSTS_REQUEST,
+        type: LOAD_USER_POSTS_REQUEST,
+        data: params.id,
       });
       store.dispatch(END);
       await store.sagaTask.toPromise();
     }
 );
 
-export default Home;
+export default UserPosts;
