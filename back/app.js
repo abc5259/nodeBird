@@ -9,6 +9,7 @@ const morgan = require("morgan");
 const postRouter = require("./routes/post.js");
 const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user.js");
+const hashtagRouter = require("./routes/hashtag");
 const db = require("./models");
 const passportConfig = require("./passport");
 
@@ -49,6 +50,7 @@ app.get("/", (req, res) => {
 app.use("/post", postRouter);
 app.use("/posts", postsRouter);
 app.use("/user", userRouter);
+app.use("hashtag", hashtagRouter);
 
 app.listen(3065, () => {
   console.log("서버 실행 중");

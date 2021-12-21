@@ -19,6 +19,7 @@ const router = express.Router();
 router.get("/", stayLogIn);
 // post
 router.get("/:userId/posts", getUserPosts);
+
 router.post("/", isNotLoggedIn, signUp);
 router.post("/login", isNotLoggedIn, logIn);
 router.post("/logout", isLoggedIn, logOut);
