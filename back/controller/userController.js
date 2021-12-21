@@ -186,7 +186,9 @@ exports.getFollowers = async (req, res, next) => {
     if (!user) {
       return res.status(403).send("없는 사람을 언팔로우하려고 하시네요?");
     }
-    const followers = await user.getFollowers();
+    const followers = await user.getFollowers({
+      limit: +req.query.limit,
+    });
     return res.status(200).json(followers);
   } catch (error) {
     console.log(error);
@@ -200,7 +202,9 @@ exports.getFollowings = async (req, res, next) => {
     if (!user) {
       return res.status(403).send("없는 사람을 언팔로우하려고 하시네요?");
     }
-    const followings = await user.getFollowings();
+    const followings = await user.getFollowings({
+      limit: +req.query.limit,
+    });
     return res.status(200).json(followings);
   } catch (error) {
     console.log(error);
