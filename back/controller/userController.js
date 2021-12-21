@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const passport = require("passport");
-const { User, Post } = require("../models");
+const { Op } = require("sequelize/dist");
+const { User, Post, Comment, Image } = require("../models");
 
 exports.stayLogIn = async (req, res, next) => {
   try {
@@ -203,6 +204,62 @@ exports.getFollowings = async (req, res, next) => {
     return res.status(200).json(followings);
   } catch (error) {
     console.log(error);
+    next(error);
+  }
+};
+
+exports.getUserPosts = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const { lastId } = req.query;
+    const user = await User.findOne({
+      where: { id: userId },
+    });
+    if (!user) {
+      return res.status(404).send("존재하지 않는 User입니다.");
+    }
+    const where = { userId };
+    if (+lastId) {
+      where.id = { [Op.lt]: +lastId }; //Id가 lastId보다 작은
+    }
+    const posts = await Post.findAll({
+      where,
+      limit: 10,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: Post,
+          as: "Retweet",
+          include: [
+            {
+              model: User,
+              attributes: ["id", "nickname"],
+            },
+            {
+              model: Image,
+            },
+          ],
+        },
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [{ model: User, attributes: ["id", "nickname"] }],
+        },
+        { model: User, as: "Likers", attributes: ["id"] }, //좋아요 누른 사람
+      ],
+    });
+    return res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
     next(error);
   }
 };

@@ -227,7 +227,7 @@ function* loadPost(action) {
 }
 
 function loadUserPostsAPI(data, lastId) {
-  return axios.get(`/user/${data}?lastId=${lastId || 0}`);
+  return axios.get(`/user/${data}/posts?lastId=${lastId || 0}`);
 }
 
 function* loadUserPosts(action) {
@@ -247,7 +247,7 @@ function* loadUserPosts(action) {
 }
 
 function loadHashtagPostsAPI(data, lastId) {
-  return axios.get(`/hashtag/${data}?lastId=${lastId || 0}`);
+  return axios.get(`/hashtag/${data}/posts?lastId=${lastId || 0}`);
 }
 
 function* loadHashtagPosts(action) {
