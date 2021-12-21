@@ -247,10 +247,13 @@ function* loadUserPosts(action) {
 }
 
 function loadHashtagPostsAPI(data, lastId) {
-  return axios.get(`/hashtag/${data}/posts?lastId=${lastId || 0}`);
+  return axios.get(
+    `/hashtag/${encodeURIComponent(data)}/posts?lastId=${lastId || 0}`
+  );
 }
 
 function* loadHashtagPosts(action) {
+  console.log(action.data);
   try {
     const result = yield call(loadHashtagPostsAPI, action.data, action.lastId);
     yield put({

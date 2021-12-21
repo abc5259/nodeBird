@@ -1,7 +1,7 @@
 import AppLayout from "../../components/AppLayout";
 import { useSelector } from "react-redux";
 import PostCard from "../../components/PostCard";
-// import PostForm from "....//components/PostForm";
+import PostForm from "../../components/PostForm";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { LOAD_MY_INFO_REQUEST } from "../../reducers/user";
@@ -46,12 +46,12 @@ const UserPosts = () => {
     return () => {
       window.removeEventListener("scroll", onScroll);
     };
-  }, [hasMorePost, loadPostsLoading]);
+  }, [mainPosts.length, hasMorePost, id, loadPostsLoading]);
   return (
     <>
       <AppLayout>
         <Head>{/* <title>{.nickname}님의 글</title> */}</Head>
-        {/* {me && <PostForm />} */}
+        {me && <PostForm />}
         {mainPosts.map(post => (
           <PostCard key={post.id} post={post} />
         ))}

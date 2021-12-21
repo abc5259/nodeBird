@@ -19,7 +19,7 @@ exports.getHashtagPosts = async (req, res, next) => {
       include: [
         {
           model: Hashtag,
-          where: { name: hashtag },
+          where: { name: decodeURIComponent(hashtag) },
         },
         {
           model: Post,
